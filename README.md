@@ -199,8 +199,8 @@ serve the addon** — no server, no database, no Workers, no VPS.
 
 **Notes**
 
-- After changing the whitelist, bump `ADDON_VERSION` in `src/build.ts` so clients
-  refresh their cached manifest.
+- The manifest version is bumped automatically on every deploy
+  (`ADDON_VERSION=1.0.<run_number>`), so clients detect whitelist changes.
 - GitHub Pages cannot set custom response headers. Native clients (Stremio
   desktop/Android TV, Nuvio) do not enforce CORS, so this is fine for the two
   target devices. If you also want the addon to work in a browser (Stremio Web),
@@ -233,10 +233,15 @@ Two security notes:
 
 ## 10. Maintenance
 
-1. Edit `approved-content.json` in the GitHub web UI (add/remove `tt` ids).
-2. Bump `ADDON_VERSION` in `src/build.ts` (same commit).
-3. GitHub Actions rebuilds and redeploys. In Nuvio, use the addon's *Refresh*
-   action; in Stremio, restart the app or reinstall the addon.
+1. Edit `approved-content.json` in the GitHub web UI (add/remove `tt` ids) —
+   that is the only manual step.
+2. GitHub Actions rebuilds and redeploys within ~1 minute, with a new manifest
+   version, so clients notice the change.
+3. Refresh the client:
+   - **Nuvio:** Settings → Addons → *Refresh* on the addon (one tap).
+   - **Stremio:** restart the app, or reinstall the addon.
+
+Local builds still work: `npm run build` uses a fallback version.
 
 ## 11. Limitations a catalog addon cannot solve
 

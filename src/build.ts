@@ -6,8 +6,12 @@ import { createAddonBuilder } from './sdk';
 import { CONTENT_TYPES, TYPE_BY_SECTION } from './types';
 import type { ContentType, Manifest, MetaDetail, Whitelist } from './types';
 
-/** Bump this when the whitelist changes so clients refresh their cached manifest. */
-const ADDON_VERSION = '1.0.0';
+/**
+ * Manifest version. Bumped automatically on every GitHub Actions deploy
+ * (the workflow sets ADDON_VERSION=1.0.<run_number>); the constant is the
+ * fallback for local builds.
+ */
+const ADDON_VERSION = process.env.ADDON_VERSION ?? '1.0.0';
 
 const ADDON_ID = 'com.example.kids-catalog';
 const ADDON_NAME = 'Kids Catalog';
