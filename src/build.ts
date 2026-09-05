@@ -18,6 +18,21 @@ const ADDON_NAME = 'Kids Catalog';
 const CATALOG_ID = 'kids';
 const DIST_DIR = path.resolve(process.cwd(), 'dist');
 
+/** Minimal landing page served at the site root. */
+const LANDING_PAGE = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${ADDON_NAME} addon</title>
+</head>
+<body>
+<h1>${ADDON_NAME} addon</h1>
+<p>Stremio-protocol catalog addon. Manifest: <a href="manifest.json">manifest.json</a>.</p>
+</body>
+</html>
+`;
+
 function isImdbId(value: unknown): value is string {
   return typeof value === 'string' && /^tt\d+$/.test(value);
 }
@@ -106,6 +121,7 @@ async function main(): Promise<void> {
   const addon = builder.getInterface();
 
   await writeJson(path.join(DIST_DIR, 'manifest.json'), addon.manifest);
+  await writeFile(path.join(DIST_DIR, 'index.html'), LANDING_PAGE, 'utf8');
   for (const type of CONTENT_TYPES) {
     const catalogResponse = await addon.get('catalog', type, CATALOG_ID);
     await writeJson(path.join(DIST_DIR, 'catalog', type, `${CATALOG_ID}.json`), catalogResponse);
