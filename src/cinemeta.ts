@@ -25,13 +25,37 @@ export function parseMetaDetail(raw: unknown, type: ContentType, imdbId: string)
 /** Fetches full meta (including series episodes) from Cinemeta. */
 export async function fetchMetaDetail(type: ContentType, imdbId: string): Promise<MetaDetail> {
   const url = `${CINEMETA_BASE_URL}/meta/${type}/${imdbId}.json`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Cinemeta GET ${url} failed with HTTP ${response.status}`);
-  }
-  const raw: unknown = await response.json();
+  const raw = await fetchJsonWithRetry(url);
   const payload = isRecord(raw) ? raw.meta : undefined;
   return parseMetaDetail(payload, type, imdbId);
+}
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 500;
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** GET + JSON parse, retrying on transient network/HTTP errors. */
+async function fetchJsonWithRetry(url: string): Promise<unknown> {
+  let lastError: Error = new Error(`Cinemeta GET ${url} failed`);
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        return (await response.json()) as unknown;
+      }
+      lastError = new Error(`Cinemeta GET ${url} failed with HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(`Cinemeta GET ${url} failed`);
+    }
+    if (attempt < MAX_RETRIES) {
+      console.warn(`  retrying ${url} (attempt ${attempt}/${MAX_RETRIES - 1})`);
+      await delay(RETRY_DELAY_MS * attempt);
+    }
+  }
+  throw lastError;
 }
 
 /**
