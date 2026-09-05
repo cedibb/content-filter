@@ -1,0 +1,20 @@
+{
+  "name": "kids-catalog-addon",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static Stremio-protocol catalog addon exposing the approved-content whitelist.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "stremio-addon-sdk": "^1.6.10",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.4"
+  }
+}
