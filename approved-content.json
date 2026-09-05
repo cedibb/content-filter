@@ -1,30 +1,32 @@
 {
-  "movies": [],
+  "movies": [
+    // Add movie ids here, e.g. "tt0114709", // Toy Story
+  ],
   "series": [
-    "tt0449545",
-    "tt7678620",
-    "tt3590338",
-    "tt19356182",
-    "tt2948562",
-    "tt3070014",
-    "tt0245637",
-    "tt2014553",
-    "tt1176301",
-    "tt2279853",
-    "tt0203254",
-    "tt0426381",
-    "tt0293734",
-    "tt0165052",
-    "tt7344644",
-    "tt9288860",
-    "tt9054228",
-    "tt2197822",
-    "tt19883592",
-    "tt0331755",
-    "tt7978538",
-    "tt11992456",
-    "tt4933650",
-    "tt34475386",
-    "tt4291050"
+    "tt0449545", // Curious George
+    "tt7678620", // Bluey
+    "tt3590338", // Puffin Rock
+    "tt19356182", // Chip Chilla
+    "tt2948562", // Tumble Leaf
+    "tt3070014", // Sarah & Duck
+    "tt0245637", // Little Bear
+    "tt2014553", // Daniel Tiger's Neighborhood
+    "tt1176301", // Maisy
+    "tt2279853", // Guess How Much I Love You
+    "tt0203254", // Franklin
+    "tt0426381", // The World of Eric Carle (The Very Hungry Caterpillar & Other Stories)
+    "tt0293734", // Oswald
+    "tt0165052", // The New Adventures of Winnie the Pooh
+    "tt7344644", // If You Give a Mouse a Cookie
+    "tt9288860", // Trash Truck
+    "tt9054228", // Lucas the Spider
+    "tt2197822", // Frog and Toad
+    "tt19883592", // Sea of Love
+    "tt0331755", // Katie and Orbie
+    "tt7978538", // Numberblocks
+    "tt11992456", // Elinor Wonders Why
+    "tt4933650", // Scout & the Gumboot Kids
+    "tt34475386", // The Berenstain Bears (2003)
+    "tt4291050" // Hey Duggee
   ]
 }

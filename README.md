@@ -131,15 +131,23 @@ device.
 
 ## 4. `approved-content.json` format
 
-```json
+The whitelist supports JSON with comments (JSONC), so each entry can carry a
+`// show name` annotation:
+
+```jsonc
 {
-  "movies": ["tt0114709", "tt0266543", "tt2096673"],
-  "series": ["tt0417299"]
+  "movies": [
+    // "tt0114709", // Toy Story
+  ],
+  "series": [
+    "tt7678620", // Bluey
+    "tt3590338" // Puffin Rock
+  ]
 }
 ```
 
-IMDb ids (`tt…`) are used as content ids. The build script validates the format
-and fails loudly on bad input.
+IMDb ids (`tt…`) are used as content ids. Comments are documentation only — the
+build script strips them and validates the ids (it fails loudly on bad input).
 
 ## 5. How metadata is handled
 

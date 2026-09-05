@@ -37,6 +37,59 @@ function isImdbId(value: unknown): value is string {
   return typeof value === 'string' && /^tt\d+$/.test(value);
 }
 
+/** Removes line and block comments outside string literals (JSONC support). */
+function stripJsonComments(text: string): string {
+  let result = '';
+  let inString = false;
+  let inLineComment = false;
+  let inBlockComment = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index] ?? '';
+    const next = text[index + 1] ?? '';
+    if (inLineComment) {
+      if (char === '\n') {
+        inLineComment = false;
+        result += char;
+      }
+      continue;
+    }
+    if (inBlockComment) {
+      if (char === '*' && next === '/') {
+        inBlockComment = false;
+        index += 1;
+      }
+      continue;
+    }
+    if (inString) {
+      result += char;
+      if (char === '\\') {
+        result += next;
+        index += 1;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (char === '"') {
+      inString = true;
+      result += char;
+      continue;
+    }
+    if (char === '/' && next === '/') {
+      inLineComment = true;
+      index += 1;
+      continue;
+    }
+    if (char === '/' && next === '*') {
+      inBlockComment = true;
+      index += 1;
+      continue;
+    }
+    result += char;
+  }
+  return result;
+}
+
 function parseIdList(value: unknown, section: string): string[] {
   if (!Array.isArray(value) || !value.every(isImdbId)) {
     throw new Error(`"${section}" in approved-content.json must be an array of IMDb ids like "tt0114709"`);
@@ -44,11 +97,11 @@ function parseIdList(value: unknown, section: string): string[] {
   return value as string[];
 }
 
-/** Reads and validates the whitelist, the single source of truth. */
+/** Reads and validates the whitelist (JSON with optional comments), the single source of truth. */
 export async function readWhitelist(): Promise<Whitelist> {
   const filePath = path.resolve(process.cwd(), 'approved-content.json');
   const text = await readFile(filePath, 'utf8');
-  const parsed: unknown = JSON.parse(text);
+  const parsed: unknown = JSON.parse(stripJsonComments(text));
   if (typeof parsed !== 'object' || parsed === null) {
     throw new Error('approved-content.json must be a JSON object');
   }
