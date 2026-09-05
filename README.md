@@ -197,6 +197,9 @@ serve the addon** — no server, no database, no Workers, no VPS.
 3. The included workflow builds `dist/` and deploys it. Your addon URL is
    `https://<user>.github.io/<repo>/manifest.json`.
 
+This repository's live addon:
+`https://cedibb.github.io/content-filter/manifest.json`
+
 **Notes**
 
 - The manifest version is bumped automatically on every deploy
